@@ -1,0 +1,132 @@
+Assertion 1 : Validate Response Status code as 200
+Step 1 : 
+Create a properties file(config.properites) under /resource folder to store accessToken, BaseURI, endpoint and BasePath etc
+baseURI= http://demo4032024.mockable.io;
+endpoint = /apitest
+
+Step 2 :
+Create a base class under /test folder and inheriting this class in all other test classes.
+Public class BaseTest
+{
+Public Properties prop = new Properties();
+Private FileInputStream fis;
+
+  @BeforeSuite 
+   Public void setup()
+   {
+      try
+     {
+        Fis = new FileInputStream(\\sr\\test\\resources\\config.properties);
+     }
+      Catch (FileNotFoundException e)
+      {
+       e. printstrakTrace ();
+      }
+      try
+      {
+       Config.load(fis);
+      }
+       Catch (IOException e) 
+       {
+        e.printstrakTrace();
+        }
+RestAssured.baseURI=config.getProperties(“baseURI”);
+RestAssured.baseURI=config.getProperties(“basePath”);
+
+ }
+}
+
+Step 3: Create a TestClass.java
+Public class TestClass extends BaseTest
+{
+
+//Storing the json response in the response variable of the type Response.
+  Response response = given(). auth(). basic(config. getProperty(“accessToken”).get(config.getProperty(“endPoint”));
+
+int statusCode =  Response.getStatusCode();
+Assert.assertEquals(statusCode , 200 , "PASS");
+
+Assertion 2 : Validate Response Header for JSON response
+Public class TestClass extends BaseTest
+{
+ 
+Response response = given(). auth(). basic(config. getProperty(“accessToken”).get(config.getProperty(“endPoint”));
+
+Public void verify contentType()
+{
+
+String contentType = response.header("Content-Type");}
+Assert.assertEquals(contentType, “application/json”, "PASS");
+
+}
+
+Public void verify encoding()
+{
+
+String Content-Encoding=  response.header("Content-Encoding");
+Assert.assertEquals(Content-Encoding, “ABC”, "PASS");
+
+}
+
+
+
+Assertion 3: Validate Response body with following data using (JsonPath/ JsonParser/ etc.) -
+Status=200
+Age= 25
+Role=QA Automation Developer
+Dob=25-02-1994
+Message=data retrieved successful
+Public class TestClass extends BaseTest
+{
+
+Response response = given(). auth(). basic(config.  getProperty(“accessToken”).get(config.getProperty(“endPoint”));
+
+Public void verify statusCode()
+{
+
+
+Assert.assertEquals(response.jsonPath().get(“Status”).toString(),, “200”, "PASS");
+
+
+}
+
+Public void verify age()
+{
+
+Assert.assertEquals(response.jsonPath().get(“Age”).toString(),, “25”, "PASS");
+
+} 
+
+Public void verify message()
+{
+
+Assert.assertEquals(response.jsonPath().getString(“Role”).toString(),, “QA Automation Developer”, "PASS");
+
+}
+Public void verify dob()
+{
+
+Assert.assertEquals(response.jsonPath().get(“DOB”).toString(),, “25-02-1994”, "PASS");
+
+
+}
+
+Public void verify successMessage()
+{
+Assert.assertEquals(response.jsonPath().getString (“Message”).toString(),, “data retrieved successful”, "PASS");
+
+}
+
+Public void verify successMessage()
+{
+Assert.assertEquals(response.jsonPath().getString (“Message”).toString(),, “data retrieved successful”, "PASS");
+
+}
+
+Public void verify negativeFLow()
+{
+
+
+Assert.assertEquals(response.jsonPath().getString (“Company”).toString(),, “ABC”, "FAIL");
+
+}
